@@ -1,0 +1,436 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c5d6",
+		"name": "Biblioteca System BFF (Final)",
+		"description": "Colección para probar el sistema de biblioteca. Usuarios y Préstamos son REST, Autores y Libros son 100% GraphQL via BFF.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Usuarios (REST)",
+			"item": [
+				{
+					"name": "Listar Usuarios",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:8080/api/usuarios",
+							"protocol": "http",
+							"host": ["{{host}}"],
+							"port": "8080",
+							"path": ["api", "usuarios"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Usuario por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+       "raw": "http://{{host}}:8080/api/usuarios/1",
+							"protocol": "http",
+							"host": ["{{host}}"],
+							"port": "8080",
+							"path": ["api", "usuarios", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Usuario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Juan Perez\",\n    \"email\": \"juan.perez@example.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:8080/api/usuarios",
+							"protocol": "http",
+							"host": ["{{host}}"],
+							"port": "8080",
+							"path": ["api", "usuarios"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Usuario",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Juan Perez Actualizado\",\n    \"email\": \"juan.perez.new@example.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+       "raw": "http://{{host}}:8080/api/usuarios/1",
+							"protocol": "http",
+							"host": ["{{host}}"],
+							"port": "8080",
+							"path": ["api", "usuarios", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Usuario",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+       "raw": "http://{{host}}:8080/api/usuarios/1",
+							"protocol": "http",
+							"host": ["{{host}}"],
+							"port": "8080",
+							"path": ["api", "usuarios", "1"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2. Prestamos (REST)",
+			"item": [
+				{
+					"name": "Listar Prestamos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+       "raw": "http://{{host}}:8080/api/prestamos",
+							"protocol": "http",
+							"host": ["{{host}}"],
+							"port": "8080",
+							"path": ["api", "prestamos"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Prestamo por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+       "raw": "http://{{host}}:8080/api/prestamos/1",
+							"protocol": "http",
+							"host": ["{{host}}"],
+							"port": "8080",
+							"path": ["api", "prestamos", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registrar Prestamo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"usuarioId\": \"1\",\n    \"libroId\": \"1\",\n    \"fechaPrestamo\": \"2023-10-27\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+       "raw": "http://{{host}}:8080/api/prestamos",
+							"protocol": "http",
+							"host": ["{{host}}"],
+							"port": "8080",
+							"path": ["api", "prestamos"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Prestamo",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"usuarioId\": \"1\",\n    \"libroId\": \"1\",\n    \"fechaPrestamo\": \"2023-10-27\",\n    \"fechaDevolucion\": \"2023-11-05\",\n    \"estado\": \"DEVUELTO\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+       "raw": "http://{{host}}:8080/api/prestamos/1",
+							"protocol": "http",
+							"host": ["{{host}}"],
+							"port": "8080",
+							"path": ["api", "prestamos", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Prestamo",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+       "raw": "http://{{host}}:8080/api/prestamos/1",
+							"protocol": "http",
+							"host": ["{{host}}"],
+							"port": "8080",
+							"path": ["api", "prestamos", "1"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "3. Autores (BFF - 100% GraphQL)",
+			"item": [
+				{
+					"name": "Listar Autores",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\n  autores {\n    id\n    nombre\n    nacionalidad\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+       "raw": "http://{{host}}:8080/api/autores",
+							"protocol": "http",
+							"host": ["{{host}}"],
+							"port": "8080",
+							"path": ["api", "autores"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Autor por ID",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query($id: ID!) {\n  autorById(id: $id) {\n    id\n    nombre\n    nacionalidad\n  }\n}",
+								"variables": "{\n  \"id\": \"1\"\n}"
+							}
+						},
+						"url": {
+       "raw": "http://{{host}}:8080/api/autores",
+							"protocol": "http",
+							"host": ["{{host}}"],
+							"port": "8080",
+							"path": ["api", "autores"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Autor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($nombre: String!, $nacionalidad: String!) {\n  createAutor(nombre: $nombre, nacionalidad: $nacionalidad) {\n    id\n    nombre\n    nacionalidad\n  }\n}",
+								"variables": "{\n  \"nombre\": \"Gabriel García Márquez\",\n  \"nacionalidad\": \"Colombiana\"\n}"
+							}
+						},
+						"url": {
+       "raw": "http://{{host}}:8080/api/autores",
+							"protocol": "http",
+							"host": ["{{host}}"],
+							"port": "8080",
+							"path": ["api", "autores"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Autor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($id: ID!, $nombre: String!, $nacionalidad: String!) {\n  updateAutor(id: $id, nombre: $nombre, nacionalidad: $nacionalidad) {\n    id\n    nombre\n    nacionalidad\n  }\n}",
+								"variables": "{\n  \"id\": \"1\",\n  \"nombre\": \"Gabriel García Márquez Actualizado\",\n  \"nacionalidad\": \"Colombiana\"\n}"
+							}
+						},
+						"url": {
+       "raw": "http://{{host}}:8080/api/autores",
+							"protocol": "http",
+							"host": ["{{host}}"],
+							"port": "8080",
+							"path": ["api", "autores"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Autor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($id: ID!) {\n  deleteAutor(id: $id)\n}",
+								"variables": "{\n  \"id\": \"1\"\n}"
+							}
+						},
+						"url": {
+       "raw": "http://{{host}}:8080/api/autores",
+							"protocol": "http",
+							"host": ["{{host}}"],
+							"port": "8080",
+							"path": ["api", "autores"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "4. Libros (BFF - 100% GraphQL)",
+			"item": [
+				{
+					"name": "Listar Libros",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\n  libros {\n    id\n    titulo\n    autorId\n    disponible\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+       "raw": "http://{{host}}:8080/api/libros",
+							"protocol": "http",
+							"host": ["{{host}}"],
+							"port": "8080",
+							"path": ["api", "libros"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Libro por ID",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query($id: ID!) {\n  libroById(id: $id) {\n    id\n    titulo\n    autorId\n    disponible\n  }\n}",
+								"variables": "{\n  \"id\": \"1\"\n}"
+							}
+						},
+						"url": {
+       "raw": "http://{{host}}:8080/api/libros",
+							"protocol": "http",
+							"host": ["{{host}}"],
+							"port": "8080",
+							"path": ["api", "libros"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Libro",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($titulo: String!, $autorId: ID!, $disponible: Int!) {\n  createLibro(titulo: $titulo, autorId: $autorId, disponible: $disponible) {\n    id\n    titulo\n    autorId\n    disponible\n  }\n}",
+								"variables": "{\n  \"titulo\": \"Cien años de soledad\",\n  \"autorId\": \"1\",\n  \"disponible\": 10\n}"
+							}
+						},
+						"url": {
+       "raw": "http://{{host}}:8080/api/libros",
+							"protocol": "http",
+							"host": ["{{host}}"],
+							"port": "8080",
+							"path": ["api", "libros"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Libro",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($id: ID!, $titulo: String!, $autorId: ID!, $disponible: Int!) {\n  updateLibro(id: $id, titulo: $titulo, autorId: $autorId, disponible: $disponible) {\n    id\n    titulo\n    autorId\n    disponible\n  }\n}",
+								"variables": "{\n  \"id\": \"1\",\n  \"titulo\": \"Cien años de soledad (Edición Especial)\",\n  \"autorId\": \"1\",\n  \"disponible\": 5\n}"
+							}
+						},
+						"url": {
+       "raw": "http://{{host}}:8080/api/libros",
+							"protocol": "http",
+							"host": ["{{host}}"],
+							"port": "8080",
+							"path": ["api", "libros"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Libro",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($id: ID!) {\n  deleteLibro(id: $id)\n}",
+								"variables": "{\n  \"id\": \"1\"\n}"
+							}
+						},
+						"url": {
+       "raw": "http://{{host}}:8080/api/libros",
+							"protocol": "http",
+							"host": ["{{host}}"],
+							"port": "8080",
+							"path": ["api", "libros"]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

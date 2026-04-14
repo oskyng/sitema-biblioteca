@@ -1,0 +1,16 @@
+services:
+  bff-service:
+    image: oskyng/bff-bibioteca-service:1.0
+    environment:
+      FUNCTIONS_USUARIOS_URL: https://biblioteca-evcwgpbpbwfqfnfh.westus2-01.azurewebsites.net/api/usuarios
+      FUNCTIONS_PRESTAMOS_URL: https://biblioteca-evcwgpbpbwfqfnfh.westus2-01.azurewebsites.net/api/prestamos
+      FUNCTIONS_LIBROS_URL: https://biblioteca-evcwgpbpbwfqfnfh.westus2-01.azurewebsites.net/api/libros
+      FUNCTIONS_AUTORES_URL: https://biblioteca-evcwgpbpbwfqfnfh.westus2-01.azurewebsites.net/api/autores
+    ports:
+      - "80:8080"
+    networks:
+      - biblioteca-net
+
+networks:
+  biblioteca-net:
+    driver: bridge
