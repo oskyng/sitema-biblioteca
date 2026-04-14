@@ -39,9 +39,9 @@ public class AutoresFunction {
                 JsonNode jsonNode = mapper.readTree(body);
                 String query = jsonNode.has("query") ? jsonNode.get("query").asText() : "";
                 
-                if (query.contains("getAutores")) {
+                if (query.contains("getAutores") || query.contains("autores")) {
                     data = getAllAutores(conn);
-                } else if (query.contains("getAutor")) {
+                } else if (query.contains("getAutor") || query.contains("autorById")) {
                     Long id = jsonNode.get("variables").get("id").asLong();
                     data = getAutor(conn, id);
                 } else if (query.contains("createAutor")) {

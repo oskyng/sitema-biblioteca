@@ -38,9 +38,9 @@ public class LibrosFunctions {
                 JsonNode jsonNode = mapper.readTree(body);
                 String query = jsonNode.has("query") ? jsonNode.get("query").asText() : "";
                 
-                if (query.contains("getLibros")) {
+                if (query.contains("getLibros") || query.contains("libros")) {
                     data = getAllLibros(conn);
-                } else if (query.contains("getLibro")) {
+                } else if (query.contains("getLibro") || query.contains("libroById")) {
                     Long id = jsonNode.get("variables").get("id").asLong();
                     data = getLibro(conn, id);
                 } else if (query.contains("createLibro")) {
