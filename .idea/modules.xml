@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/azure-function-biblioteca/azure-function-biblioteca.iml" filepath="$PROJECT_DIR$/azure-function-biblioteca/azure-function-biblioteca.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/biblioteca.iml" filepath="$PROJECT_DIR$/.idea/biblioteca.iml" />
     </modules>
   </component>
 </project>

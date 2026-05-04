@@ -131,12 +131,37 @@ public class UsuarioFunction {
         String idStr = request.getQueryParameters().get("id");
         if (idStr == null) return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("ID parameter is required").build();
 
-        String sql = "DELETE FROM usuarios WHERE id = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setLong(1, Long.parseLong(idStr));
-            int affected = pstmt.executeUpdate();
-            if (affected == 0) return request.createResponseBuilder(HttpStatus.NOT_FOUND).body("Usuario no encontrado").build();
+        Long usuarioId = Long.parseLong(idStr);
+
+        // Iniciar transacción
+        conn.setAutoCommit(false);
+        try {
+            // 1. Eliminar préstamos asociados
+            String deletePrestamosSql = "DELETE FROM prestamos WHERE usuario_id = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(deletePrestamosSql)) {
+                pstmt.setLong(1, usuarioId);
+                pstmt.executeUpdate();
+            }
+
+            // 2. Eliminar usuario
+            String sql = "DELETE FROM usuarios WHERE id = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setLong(1, usuarioId);
+                int affected = pstmt.executeUpdate();
+                if (affected == 0) {
+                    conn.rollback();
+                    return request.createResponseBuilder(HttpStatus.NOT_FOUND).body("Usuario no encontrado").build();
+                }
+            }
+
+            conn.commit();
+        } catch (Exception e) {
+            conn.rollback();
+            throw e;
+        } finally {
+            conn.setAutoCommit(true);
         }
+
         return request.createResponseBuilder(HttpStatus.NO_CONTENT).build();
     }
 }

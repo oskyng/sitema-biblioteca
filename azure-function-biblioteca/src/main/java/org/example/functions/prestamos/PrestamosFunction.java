@@ -7,6 +7,7 @@ import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
 import org.example.models.Prestamo;
 import org.example.util.DatabaseConfig;
+import org.example.util.EventGridUtil;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class PrestamosFunction {
                 case GET:
                     return handleGet(request, conn);
                 case POST:
-                    return handlePost(request, conn);
+                    return handlePost(request, conn, context);
                 case PUT:
                     return handlePut(request, conn);
                 case DELETE:
@@ -98,28 +99,24 @@ public class PrestamosFunction {
         }
     }
 
-    private HttpResponseMessage handlePost(HttpRequestMessage<Optional<String>> request, Connection conn) throws Exception {
+    private HttpResponseMessage handlePost(HttpRequestMessage<Optional<String>> request, Connection conn, final ExecutionContext context) throws Exception {
         String body = request.getBody().orElse(null);
         if (body == null) return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Body is required").build();
 
         Prestamo p = mapper.readValue(body, Prestamo.class);
-        String sql = "INSERT INTO prestamos (usuario_id, libro_id, fecha_prestamo, fecha_devolucion, estado) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql, new String[]{"ID"})) {
-            pstmt.setLong(1, p.getUsuarioId());
-            pstmt.setLong(2, p.getLibroId());
-            pstmt.setDate(3, p.getFechaPrestamo());
-            pstmt.setDate(4, p.getFechaDevolucion());
-            pstmt.setString(5, p.getEstado() != null ? p.getEstado() : "ACTIVO");
-            pstmt.executeUpdate();
-            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    p.setId(generatedKeys.getLong(1));
-                }
-            }
-        }
-        return request.createResponseBuilder(HttpStatus.CREATED)
+        
+        // Publicar evento a Event Grid
+        // La lógica de BD ahora se manejará asincrónicamente en el consumidor del evento
+        EventGridUtil.publishEvent(
+            "/biblioteca/prestamos/solicitud",
+            "Biblioteca.PrestamoCreado",
+            p,
+            context
+        );
+
+        return request.createResponseBuilder(HttpStatus.ACCEPTED)
                 .header("Content-Type", "application/json")
-                .body(mapper.writeValueAsString(p))
+                .body("{\"message\": \"Solicitud de préstamo recibida y en proceso\", \"data\": " + body + "}")
                 .build();
     }
 

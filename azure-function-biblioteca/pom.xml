@@ -24,6 +24,13 @@
             <version>${azure.functions.java.library.version}</version>
         </dependency>
 
+        <!-- Azure Event Grid -->
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-messaging-eventgrid</artifactId>
+            <version>4.12.0</version>
+        </dependency>
+
         <!-- Oracle JDBC -->
         <dependency>
             <groupId>com.oracle.database.jdbc</groupId>

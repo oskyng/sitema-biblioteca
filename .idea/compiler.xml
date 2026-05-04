@@ -8,8 +8,12 @@
         <outputRelativeToContentRoot value="true" />
         <module name="bff-service" />
         <module name="azure-function-biblioteca" />
+        <module name="biblioteca-producer" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="biblioteca-producer" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
