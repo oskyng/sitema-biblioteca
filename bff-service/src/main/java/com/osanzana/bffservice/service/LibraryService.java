@@ -1,6 +1,7 @@
 package com.osanzana.bffservice.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.osanzana.bffservice.model.Prestamo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -94,7 +95,8 @@ public class LibraryService {
     public ResponseEntity<Object> createPrestamo(Object body) {
         logger.info("Creando prestamo en: {} con body: {}", prestamosUrl, body);
         try {
-            String jsonBody = objectMapper.writeValueAsString(body);
+            Prestamo p = objectMapper.convertValue(body, Prestamo.class);
+            String jsonBody = objectMapper.writeValueAsString(p);
             logger.info("JSON a enviar: {}", jsonBody);
             org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
             headers.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);

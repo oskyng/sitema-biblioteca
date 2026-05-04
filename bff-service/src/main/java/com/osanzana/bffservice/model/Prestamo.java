@@ -1,7 +1,6 @@
-package org.example.models;
+package com.osanzana.bffservice.model;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 public class Prestamo {
     private Long id;

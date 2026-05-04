@@ -4,6 +4,8 @@ import com.microsoft.azure.functions.annotation.*;
 import com.microsoft.azure.functions.*;
 import com.azure.messaging.eventgrid.EventGridEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.example.models.Prestamo;
 import org.example.util.DatabaseConfig;
 
@@ -16,26 +18,31 @@ import java.sql.ResultSet;
  */
 public class BibliotecaEventGridFunction {
 
-    private static final ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
     /**
      * This function will be invoked when an event is received from Event Grid.
      */
     @FunctionName("BibliotecaEventGridFunction")
     public void run(
-            @EventGridTrigger(name = "eventGridEvent") EventGridEvent event,
+            @EventGridTrigger(name = "eventGridEvent") String eventJson,
             final ExecutionContext context) {
         context.getLogger().info("Java Event Grid trigger function executed.");
-        context.getLogger().info("Subject: " + event.getSubject());
-        context.getLogger().info("Type: " + event.getEventType());
 
-        if ("Biblioteca.PrestamoCreado".equals(event.getEventType())) {
-            try {
+        try {
+            EventGridEvent event = EventGridEvent.fromString(eventJson).get(0);
+            context.getLogger().info("Subject: " + event.getSubject());
+            context.getLogger().info("Type: " + event.getEventType());
+
+            if ("Biblioteca.PrestamoCreado".equals(event.getEventType())) {
                 Prestamo p = event.getData().toObject(Prestamo.class);
                 procesarPrestamo(p, context);
-            } catch (Exception e) {
-                context.getLogger().severe("Error al procesar el evento de préstamo: " + e.getMessage());
             }
+        } catch (Exception e) {
+            context.getLogger().severe("Error al procesar el evento: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -88,8 +95,8 @@ public class BibliotecaEventGridFunction {
                 try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                     pstmt.setLong(1, p.getUsuarioId());
                     pstmt.setLong(2, p.getLibroId());
-                    pstmt.setDate(3, p.getFechaPrestamo());
-                    pstmt.setDate(4, p.getFechaDevolucion());
+                    pstmt.setObject(3, p.getFechaPrestamo());
+                    pstmt.setObject(4, p.getFechaDevolucion());
                     pstmt.setString(5, p.getEstado() != null ? p.getEstado() : "ACTIVO");
                     pstmt.executeUpdate();
                 }

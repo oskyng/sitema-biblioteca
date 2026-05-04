@@ -1,6 +1,8 @@
 package org.example.functions.prestamos;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.microsoft.azure.functions.*;
 import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.FunctionName;
@@ -16,7 +18,9 @@ import java.util.Optional;
 
 public class PrestamosFunction {
 
-    private static final ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
     @FunctionName("prestamos")
     public HttpResponseMessage run(
@@ -63,8 +67,8 @@ public class PrestamosFunction {
                                 rs.getLong("id"),
                                 rs.getLong("usuario_id"),
                                 rs.getLong("libro_id"),
-                                rs.getDate("fecha_prestamo"),
-                                rs.getDate("fecha_devolucion"),
+                                rs.getObject("fecha_prestamo", java.time.LocalDate.class),
+                                rs.getObject("fecha_devolucion", java.time.LocalDate.class),
                                 rs.getString("estado")
                         );
                         return request.createResponseBuilder(HttpStatus.OK)
@@ -86,8 +90,8 @@ public class PrestamosFunction {
                             rs.getLong("id"),
                             rs.getLong("usuario_id"),
                             rs.getLong("libro_id"),
-                            rs.getDate("fecha_prestamo"),
-                            rs.getDate("fecha_devolucion"),
+                            rs.getObject("fecha_prestamo", java.time.LocalDate.class),
+                            rs.getObject("fecha_devolucion", java.time.LocalDate.class),
                             rs.getString("estado")
                     ));
                 }
@@ -105,6 +109,14 @@ public class PrestamosFunction {
 
         Prestamo p = mapper.readValue(body, Prestamo.class);
         
+        // Asignar fechas por defecto si no vienen
+        if (p.getFechaPrestamo() == null) {
+            p.setFechaPrestamo(java.time.LocalDate.now());
+        }
+        if (p.getFechaDevolucion() == null) {
+            p.setFechaDevolucion(p.getFechaPrestamo().plusDays(14));
+        }
+        
         // Publicar evento a Event Grid
         // La lógica de BD ahora se manejará asincrónicamente en el consumidor del evento
         EventGridUtil.publishEvent(
@@ -116,7 +128,7 @@ public class PrestamosFunction {
 
         return request.createResponseBuilder(HttpStatus.ACCEPTED)
                 .header("Content-Type", "application/json")
-                .body("{\"message\": \"Solicitud de préstamo recibida y en proceso\", \"data\": " + body + "}")
+                .body(mapper.writeValueAsString(p))
                 .build();
     }
 
@@ -131,8 +143,8 @@ public class PrestamosFunction {
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setLong(1, p.getUsuarioId());
             pstmt.setLong(2, p.getLibroId());
-            pstmt.setDate(3, p.getFechaPrestamo());
-            pstmt.setDate(4, p.getFechaDevolucion());
+            pstmt.setObject(3, p.getFechaPrestamo());
+            pstmt.setObject(4, p.getFechaDevolucion());
             pstmt.setString(5, p.getEstado());
             pstmt.setLong(6, p.getId());
             int affected = pstmt.executeUpdate();

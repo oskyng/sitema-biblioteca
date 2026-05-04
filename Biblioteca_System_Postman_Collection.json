@@ -15,10 +15,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{host}}:8080/api/usuarios",
+							"raw": "http://localhost/api/usuarios",
 							"protocol": "http",
-							"host": ["{{host}}"],
-							"port": "8080",
+							"host": ["localhost"],
 							"path": ["api", "usuarios"]
 						}
 					},
@@ -30,10 +29,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-       "raw": "http://{{host}}:8080/api/usuarios/1",
+							"raw": "http://localhost/api/usuarios/1",
 							"protocol": "http",
-							"host": ["{{host}}"],
-							"port": "8080",
+							"host": ["localhost"],
 							"path": ["api", "usuarios", "1"]
 						}
 					},
@@ -54,10 +52,9 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:8080/api/usuarios",
+							"raw": "http://localhost/api/usuarios",
 							"protocol": "http",
-							"host": ["{{host}}"],
-							"port": "8080",
+							"host": ["localhost"],
 							"path": ["api", "usuarios"]
 						}
 					},
@@ -78,10 +75,9 @@
 							}
 						},
 						"url": {
-       "raw": "http://{{host}}:8080/api/usuarios/1",
+							"raw": "http://localhost/api/usuarios/1",
 							"protocol": "http",
-							"host": ["{{host}}"],
-							"port": "8080",
+							"host": ["localhost"],
 							"path": ["api", "usuarios", "1"]
 						}
 					},
@@ -93,10 +89,9 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-       "raw": "http://{{host}}:8080/api/usuarios/1",
+							"raw": "http://localhost/api/usuarios/1",
 							"protocol": "http",
-							"host": ["{{host}}"],
-							"port": "8080",
+							"host": ["localhost"],
 							"path": ["api", "usuarios", "1"]
 						}
 					},
@@ -113,10 +108,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-       "raw": "http://{{host}}:8080/api/prestamos",
+							"raw": "http://localhost/api/prestamos",
 							"protocol": "http",
-							"host": ["{{host}}"],
-							"port": "8080",
+							"host": ["localhost"],
 							"path": ["api", "prestamos"]
 						}
 					},
@@ -128,10 +122,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-       "raw": "http://{{host}}:8080/api/prestamos/1",
+							"raw": "http://localhost/api/prestamos/1",
 							"protocol": "http",
-							"host": ["{{host}}"],
-							"port": "8080",
+							"host": ["localhost"],
 							"path": ["api", "prestamos", "1"]
 						}
 					},
@@ -144,7 +137,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"usuarioId\": \"1\",\n    \"libroId\": \"1\",\n    \"fechaPrestamo\": \"2023-10-27\"\n}",
+							"raw": "{\n    \"usuarioId\": 1,\n    \"libroId\": 1,\n    \"fechaPrestamo\": \"2026-05-04\",\n    \"fechaDevolucion\": \"2026-05-18\",\n    \"estado\": \"ACTIVO\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -152,10 +145,9 @@
 							}
 						},
 						"url": {
-       "raw": "http://{{host}}:8080/api/prestamos",
+							"raw": "http://localhost/api/prestamos",
 							"protocol": "http",
-							"host": ["{{host}}"],
-							"port": "8080",
+							"host": ["localhost"],
 							"path": ["api", "prestamos"]
 						}
 					},
@@ -176,10 +168,9 @@
 							}
 						},
 						"url": {
-       "raw": "http://{{host}}:8080/api/prestamos/1",
+							"raw": "http://localhost/api/prestamos/1",
 							"protocol": "http",
-							"host": ["{{host}}"],
-							"port": "8080",
+							"host": ["localhost"],
 							"path": ["api", "prestamos", "1"]
 						}
 					},
@@ -191,10 +182,9 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-       "raw": "http://{{host}}:8080/api/prestamos/1",
+							"raw": "http://localhost/api/prestamos/1",
 							"protocol": "http",
-							"host": ["{{host}}"],
-							"port": "8080",
+							"host": ["localhost"],
 							"path": ["api", "prestamos", "1"]
 						}
 					},
@@ -218,10 +208,9 @@
 							}
 						},
 						"url": {
-       "raw": "http://{{host}}:8080/api/autores",
+							"raw": "http://localhost/api/autores",
 							"protocol": "http",
-							"host": ["{{host}}"],
-							"port": "8080",
+							"host": ["localhost"],
 							"path": ["api", "autores"]
 						}
 					},
@@ -240,10 +229,9 @@
 							}
 						},
 						"url": {
-       "raw": "http://{{host}}:8080/api/autores",
+							"raw": "http://localhost/api/autores",
 							"protocol": "http",
-							"host": ["{{host}}"],
-							"port": "8080",
+							"host": ["localhost"],
 							"path": ["api", "autores"]
 						}
 					},
@@ -262,10 +250,9 @@
 							}
 						},
 						"url": {
-       "raw": "http://{{host}}:8080/api/autores",
+							"raw": "http://localhost/api/autores",
 							"protocol": "http",
-							"host": ["{{host}}"],
-							"port": "8080",
+							"host": ["localhost"],
 							"path": ["api", "autores"]
 						}
 					},
@@ -284,10 +271,9 @@
 							}
 						},
 						"url": {
-       "raw": "http://{{host}}:8080/api/autores",
+							"raw": "http://localhost/api/autores",
 							"protocol": "http",
-							"host": ["{{host}}"],
-							"port": "8080",
+							"host": ["localhost"],
 							"path": ["api", "autores"]
 						}
 					},
@@ -306,10 +292,9 @@
 							}
 						},
 						"url": {
-       "raw": "http://{{host}}:8080/api/autores",
+							"raw": "http://localhost/api/autores",
 							"protocol": "http",
-							"host": ["{{host}}"],
-							"port": "8080",
+							"host": ["localhost"],
 							"path": ["api", "autores"]
 						}
 					},
@@ -333,10 +318,9 @@
 							}
 						},
 						"url": {
-       "raw": "http://{{host}}:8080/api/libros",
+							"raw": "http://localhost/api/libros",
 							"protocol": "http",
-							"host": ["{{host}}"],
-							"port": "8080",
+							"host": ["localhost"],
 							"path": ["api", "libros"]
 						}
 					},
@@ -355,10 +339,9 @@
 							}
 						},
 						"url": {
-       "raw": "http://{{host}}:8080/api/libros",
+							"raw": "http://localhost/api/libros",
 							"protocol": "http",
-							"host": ["{{host}}"],
-							"port": "8080",
+							"host": ["localhost"],
 							"path": ["api", "libros"]
 						}
 					},
@@ -377,10 +360,9 @@
 							}
 						},
 						"url": {
-       "raw": "http://{{host}}:8080/api/libros",
+							"raw": "http://localhost/api/libros",
 							"protocol": "http",
-							"host": ["{{host}}"],
-							"port": "8080",
+							"host": ["localhost"],
 							"path": ["api", "libros"]
 						}
 					},
@@ -399,10 +381,9 @@
 							}
 						},
 						"url": {
-       "raw": "http://{{host}}:8080/api/libros",
+							"raw": "http://localhost/api/libros",
 							"protocol": "http",
-							"host": ["{{host}}"],
-							"port": "8080",
+							"host": ["localhost"],
 							"path": ["api", "libros"]
 						}
 					},
@@ -421,10 +402,9 @@
 							}
 						},
 						"url": {
-       "raw": "http://{{host}}:8080/api/libros",
+							"raw": "http://localhost/api/libros",
 							"protocol": "http",
-							"host": ["{{host}}"],
-							"port": "8080",
+							"host": ["localhost"],
 							"path": ["api", "libros"]
 						}
 					},
