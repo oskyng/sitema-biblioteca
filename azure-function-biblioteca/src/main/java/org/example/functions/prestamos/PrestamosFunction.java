@@ -160,12 +160,47 @@ public class PrestamosFunction {
         String idStr = request.getQueryParameters().get("id");
         if (idStr == null) return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("ID parameter is required").build();
 
-        String sql = "DELETE FROM prestamos WHERE id = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setLong(1, Long.parseLong(idStr));
-            int affected = pstmt.executeUpdate();
-            if (affected == 0) return request.createResponseBuilder(HttpStatus.NOT_FOUND).body("Prestamo no encontrado").build();
+        Long prestamoId = Long.parseLong(idStr);
+        
+        conn.setAutoCommit(false);
+        try {
+            // 1. Obtener el libro_id antes de eliminar el préstamo
+            Long libroId = null;
+            String selectSql = "SELECT libro_id FROM prestamos WHERE id = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(selectSql)) {
+                pstmt.setLong(1, prestamoId);
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) {
+                        libroId = rs.getLong("libro_id");
+                    } else {
+                        conn.rollback();
+                        return request.createResponseBuilder(HttpStatus.NOT_FOUND).body("Prestamo no encontrado").build();
+                    }
+                }
+            }
+
+            // 2. Devolver el libro al stock
+            String updateLibroSql = "UPDATE libros SET disponible = disponible + 1 WHERE id = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(updateLibroSql)) {
+                pstmt.setLong(1, libroId);
+                pstmt.executeUpdate();
+            }
+
+            // 3. Eliminar el préstamo
+            String deleteSql = "DELETE FROM prestamos WHERE id = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(deleteSql)) {
+                pstmt.setLong(1, prestamoId);
+                pstmt.executeUpdate();
+            }
+
+            conn.commit();
+        } catch (Exception e) {
+            conn.rollback();
+            throw e;
+        } finally {
+            conn.setAutoCommit(true);
         }
+
         return request.createResponseBuilder(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -136,14 +136,30 @@ public class UsuarioFunction {
         // Iniciar transacción
         conn.setAutoCommit(false);
         try {
-            // 1. Eliminar préstamos asociados
+            // 1. Obtener todos los libros prestados por el usuario para devolverlos al stock
+            String selectLibrosSql = "SELECT libro_id FROM prestamos WHERE usuario_id = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(selectLibrosSql)) {
+                pstmt.setLong(1, usuarioId);
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    while (rs.next()) {
+                        long libroId = rs.getLong("libro_id");
+                        String updateLibroSql = "UPDATE libros SET disponible = disponible + 1 WHERE id = ?";
+                        try (PreparedStatement updateStmt = conn.prepareStatement(updateLibroSql)) {
+                            updateStmt.setLong(1, libroId);
+                            updateStmt.executeUpdate();
+                        }
+                    }
+                }
+            }
+
+            // 2. Eliminar préstamos asociados
             String deletePrestamosSql = "DELETE FROM prestamos WHERE usuario_id = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(deletePrestamosSql)) {
                 pstmt.setLong(1, usuarioId);
                 pstmt.executeUpdate();
             }
 
-            // 2. Eliminar usuario
+            // 3. Eliminar usuario
             String sql = "DELETE FROM usuarios WHERE id = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setLong(1, usuarioId);
